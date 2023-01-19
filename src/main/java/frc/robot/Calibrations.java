@@ -5,28 +5,6 @@ package frc.robot;
  */
 public final class Calibrations {
 
-    /**
-     * Calibration specific to the Intake subsystem.
-     */
-    public static final class Intake {
-        public static final double P = 6e-5;
-        public static final double D = 0.0;
-        public static final double FF = 0.000015;
-        public static final double extendedTargetRpm = 0.9 * 11000.0;
-        public static final double retractedTargetRpm = 0.0;
-    }
-
-    /**
-     * Calibration specific to the Tower subsystem.
-     */
-    public static final class Tower {
-        public static final double P = 6e-5;
-        public static final double D = 0.0;
-        public static final double FF = 0.000015;
-        public static final double loadTargetRpm = 0.5 * 11000.0;
-        public static final double unloadTargetRpm = 0.5 * 11000.0;
-    }
-
 
     /** 
      * The average wheel diameter (best: calibrate with encoders, ok: use tape measure).

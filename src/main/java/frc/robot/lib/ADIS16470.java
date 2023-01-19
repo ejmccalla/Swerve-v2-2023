@@ -181,7 +181,7 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
     FLASH_CNT,
     Y_ACCL_OUT,
     FLASH_CNT,
-    Z_ACCL_OUT,
+    TEMP_OUT,   // Remove Z_ACCL_OUT and send out the die temp instead
     FLASH_CNT
   };
 
@@ -227,7 +227,7 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
   private double m_gyro_rate_z = 0.0;
   private double m_accel_x = 0.0;
   private double m_accel_y = 0.0;
-  private double m_accel_z = 0.0;
+  private double m_temp = 0.0; // private double m_accel_z = 0.0; Monitor temp instead
 
   // Integrated gyro angle
   private double m_integ_angle = 0.0;
@@ -288,6 +288,11 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
     this(IMUAxis.kZ, SPI.Port.kOnboardCS0, CalibrationTime._4s);
   }
 
+
+  public ADIS16470(CalibrationTime cal_time) {
+    this(IMUAxis.kZ, SPI.Port.kOnboardCS0, cal_time);
+  }
+
   /**
    * @param yaw_axis The axis that measures the yaw
    * @param port The SPI Port the gyro is plugged into
@@ -342,6 +347,15 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
 
       // Configure continuous bias calibration time based on user setting
       writeRegister(NULL_CNFG, (m_calibration_time | 0x0700));
+
+      // Run selftest and report results (DIAG_STAT bit 5)
+      writeRegister(GLOB_CMD, 0x0004);
+      try {Thread.sleep(1000);} catch (InterruptedException e) {}
+      DriverStation.reportWarning( "ADIS16470 Selftest DIAG_STAT register: " + readRegister(DIAG_STAT), false);
+      DriverStation.reportWarning( "ADIS16470 MSC_CTRL register: " + readRegister(MSC_CTRL), false);
+      DriverStation.reportWarning( "ADIS16470 NULL_CNFG register: " + readRegister(NULL_CNFG), false);
+      DriverStation.reportWarning( "ADIS16470 DEC_RATE register: " + readRegister(DEC_RATE), false);
+      DriverStation.reportWarning( "ADIS16470 FILT_CTRL register: " + readRegister(FILT_CTRL), false);
 
       // Notify DS that IMU calibration delay is active
       DriverStation.reportWarning(
@@ -708,7 +722,7 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
     double gyro_rate_z = 0.0;
     double accel_x = 0.0;
     double accel_y = 0.0;
-    double accel_z = 0.0;
+    double temp = 0.0; // double accel_z = 0.0;
     double gyro_rate_x_si = 0.0;
     double gyro_rate_y_si = 0.0;
     double gyro_rate_z_si = 0.0;
@@ -785,7 +799,8 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
           gyro_rate_z = (toShort(buffer[i + 11], buffer[i + 12]) / 10.0);
           accel_x = (toShort(buffer[i + 13], buffer[i + 14]) / 800.0);
           accel_y = (toShort(buffer[i + 15], buffer[i + 16]) / 800.0);
-          accel_z = (toShort(buffer[i + 17], buffer[i + 18]) / 800.0);
+          temp = (toShort(buffer[i + 17], buffer[i + 18]) / 10.0);
+        //   accel_z = (toShort(buffer[i + 17], buffer[i + 18]) / 800.0);
 
           // Convert scaled sensor data to SI units (for tilt calculations)
           // TODO: Should the unit outputs be selectable?
@@ -794,7 +809,7 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
           gyro_rate_z_si = gyro_rate_z * deg_to_rad;
           accel_x_si = accel_x * grav;
           accel_y_si = accel_y * grav;
-          accel_z_si = accel_z * grav;
+        //   accel_z_si = accel_z * grav;
 
           // Store timestamp for next iteration
           previous_timestamp = buffer[i];
@@ -841,7 +856,8 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
             m_gyro_rate_z = gyro_rate_z;
             m_accel_x = accel_x;
             m_accel_y = accel_y;
-            m_accel_z = accel_z;
+            m_temp = temp;
+            // m_accel_z = accel_z;
             m_compAngleX = compAngleX * rad_to_deg;
             m_compAngleY = compAngleY * rad_to_deg;
             m_accelAngleX = accelAngleX * rad_to_deg;
@@ -861,7 +877,7 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
         gyro_rate_z = 0.0;
         accel_x = 0.0;
         accel_y = 0.0;
-        accel_z = 0.0;
+        // accel_z = 0.0;
         gyro_rate_x_si = 0.0;
         gyro_rate_y_si = 0.0;
         gyro_rate_z_si = 0.0;
@@ -1007,7 +1023,12 @@ public class ADIS16470 implements AutoCloseable, NTSendable {
    * @return current acceleration in the Z axis
    */
   public synchronized double getAccelZ() {
-    return m_accel_z * 9.81;
+    return 0.0; // return m_accel_z * 9.81;
+  }
+
+  /** @return current temperature */
+  public synchronized double getTemp() {
+      return m_temp;
   }
 
   /**

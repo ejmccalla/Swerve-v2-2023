@@ -237,14 +237,14 @@ public class Drivetrain extends SubsystemBase {
         return m_imu.getAngle();
     }
 
-    // /**
-    //  * Get the die temp of the IMU.
-    //  *
-    //  * @return the IMU die temp in degrees celsius
-    //  */
-    // public double getImuTempDegC() {
-    //     return m_imu.getTemp();
-    // }
+    /**
+     * Get the die temp of the IMU.
+     *
+     * @return the IMU die temp in degrees celsius
+     */
+    public double getImuTempDegC() {
+        return m_imu.getTemp();
+    }
 
 
     //--------------------------------------------------------------------------------------------------------------------//
@@ -302,7 +302,7 @@ public class Drivetrain extends SubsystemBase {
             m_currentModulesPosition[i] = m_modules[i].getCurrentPosition();
         }
         m_kinematics = new SwerveDriveKinematics(Constants.Drivetrain.MODULE_LOCATIONS);
-        m_imu = new ADIS16470();
+        m_imu = new ADIS16470(ADIS16470.CalibrationTime._4s);
         m_odometry = new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(0.0), m_currentModulesPosition);
         m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
         m_currentState = StateType.Idle;

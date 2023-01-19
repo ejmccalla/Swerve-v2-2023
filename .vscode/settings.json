@@ -29,7 +29,9 @@
   "[java]": {
     "editor.tabSize": 4,
     "editor.detectIndentation": false,
-    "editor.insertSpaces": true
+    "editor.insertSpaces": true,
+    "editor.renderWhitespace": "all",
+    "editor.inlayHints.enabled": false
   },
   "editor.formatOnSave": false,
   "java.checkstyle.configuration": "${workspaceFolder}/styleguide-frc4607.xml",

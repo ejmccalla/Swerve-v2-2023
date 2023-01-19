@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
 
         m_pressurePsi = m_compressor.getPressure();
         m_imuYawAngleDeg = m_robotContainer.m_drivetrain.getImuYawAngleDeg();
-        m_imuTempDegC = 0.0; //m_robotContainer.m_drivetrain.getImuTempDegC();
+        m_imuTempDegC = m_robotContainer.m_drivetrain.getImuTempDegC();
         m_totalCurrentA = m_pdh.getTotalCurrent();
         m_voltageV = m_pdh.getVoltage();
         m_totalPowerWHs = m_totalCurrentA * m_voltageV * 0.02;
@@ -154,8 +154,6 @@ public class Robot extends TimedRobot {
         updateSmartDashboard();
 
         m_robotContainer.m_drivetrain.periodic();
-        m_robotContainer.m_intake.periodic();
-        m_robotContainer.m_tower.periodic();
 
         m_robotContainer.m_drivetrain.setHomeOffsets();
     }
@@ -271,7 +269,7 @@ public class Robot extends TimedRobot {
 
         m_pressurePsi = m_compressor.getPressure();
         m_imuYawAngleDeg = m_robotContainer.m_drivetrain.getImuYawAngleDeg();
-        m_imuTempDegC = 0.0; //m_robotContainer.m_drivetrain.getImuTempDegC();
+        m_imuTempDegC = m_robotContainer.m_drivetrain.getImuTempDegC();
         m_totalCurrentA = m_pdh.getTotalCurrent();
         m_voltageV = m_pdh.getVoltage();
         m_totalPowerWHs += m_totalCurrentA * m_voltageV * LOOP_TIME_TO_HOURS;
@@ -342,6 +340,7 @@ public class Robot extends TimedRobot {
     private void updateSmartDashboard() {
         SmartDashboard.putNumber("Pressure (psi)", m_pressurePsi);
         SmartDashboard.putNumber("IMU Yaw Angle (deg)", m_imuYawAngleDeg);
+        SmartDashboard.putNumber("IMU Temp (degC)", m_imuTempDegC);
         SmartDashboard.putNumber("Total Power (WHrs)", m_totalPowerWHs);
         SmartDashboard.putBoolean("Field Oriented", m_robotContainer.m_drivetrain.isFieldOriented());
         SmartDashboard.putNumberArray("Azimuth Offsets (rad)", m_robotContainer.m_drivetrain.getHomeOffsets());

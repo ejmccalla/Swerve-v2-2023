@@ -36,38 +36,6 @@ public final class Constants {
     }
 
     /**
-     * The Intake constants are port numbers and/or CAN ID's of the robot hardware which don't belong to an explicit
-     * sub-system.
-     */
-    public static final class Intake {
-        /** Switch to enable logging telemetry to disk. */
-        public static final boolean ENABLE_LOGGING = false;
-        /** CAN ID of the intake motor. */
-        public static final int MOTOR_ID = 13;
-        /** Port ID of the solenoid. */
-        public static final int SOLENOID_ID = 0;
-        /** Gear reduction. */
-        public static final double GEAR_RATIO = 1.0 / 3.0;
-        /** Roller diameter. */
-        public static final double ROLLER_DIAMETER_FT = 1.1 / 12.0;
-    }
-
-    /**
-     * The Tower constants are port numbers and/or CAN ID's of the robot hardware which don't belong to an explicit
-     * sub-system.
-     */
-    public static final class Tower {
-        /** Switch to enable logging telemetry to disk. */
-        public static final boolean ENABLE_LOGGING = false;
-        /** CAN ID of the intake motor. */
-        public static final int MOTOR_ID = 7;
-        /** Gear reduction. */
-        public static final double GEAR_RATIO = 1.0 / 5.0;
-        /** Wheel diameter. */
-        public static final double WHEEL_DIAMETER_FT = 2.0 / 12.0;
-    }
-
-    /**
      * The Drivetrain constants are port numbers and/or CAN ID's of the robot hardware which don't belong to an explicit
      * sub-system.
      *
@@ -76,7 +44,7 @@ public final class Constants {
      */
     public static final class Drivetrain {
         /** Switch to enable logging telemetry to disk. */
-        public static final boolean ENABLE_LOGGING = true;
+        public static final boolean ENABLE_LOGGING = false;
         public static final String[] MODULE_LABELS = {"FL", "FR", "RL", "RR"};
         public static final int[] TURN_IDS = {9, 30, 11, 18};
         public static final int[] DRIVE_IDS = {8, 41, 10, 19};
